@@ -10,6 +10,16 @@ export default function SearchBar({ onSearch }) {
     }
   };
 
+  // add a prop so we can customize the placeholder later
+<input
+  type="text"
+  value={query}
+  onChange={(e) => setQuery(e.target.value)}
+  placeholder={placeholder || "Search..."}
+  className="border px-3 py-2 rounded w-full"
+/>
+
+
   return (
     <form onSubmit={handleSubmit} className="flex gap-2">
       <input
@@ -23,5 +33,7 @@ export default function SearchBar({ onSearch }) {
         Search
       </button>
     </form>
+    
+    
   );
 }
