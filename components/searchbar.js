@@ -22,6 +22,9 @@ export default function SearchBar({ onSearch }) {
 />
 
 
+
+
+
   return (
     
     <form onSubmit={handleSubmit} className="flex gap-2">
@@ -35,6 +38,14 @@ export default function SearchBar({ onSearch }) {
       <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
         Search
       </button>
+        <button 
+    type="submit" 
+    disabled={!query.trim()}
+    className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
+    >
+    Search
+    </button>
+
     </form>
     
     
