@@ -4,11 +4,13 @@ export default function SearchBar({ onSearch }) {
   const [query, setQuery] = useState("");
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (query.trim()) {
-      onSearch(query);
-    }
-  };
+  e.preventDefault();
+  const cleanQuery = query.trim();
+  if (cleanQuery) {
+    onSearch(cleanQuery);
+  }
+};
+
 
   // add a prop so we can customize the placeholder later
 <input
