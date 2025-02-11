@@ -3,13 +3,16 @@ import React, { useState } from 'react';
 export default function SearchBar({ onSearch }) {
   const [query, setQuery] = useState("");
 
-  const handleSubmit = (e) => {
+const handleSubmit = (e) => {
   e.preventDefault();
   const cleanQuery = query.trim();
   if (cleanQuery) {
     onSearch(cleanQuery);
+    setQuery(""); // reset input after submit
   }
 };
+
+
 
 
   // add a prop so we can customize the placeholder later
