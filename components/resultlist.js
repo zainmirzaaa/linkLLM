@@ -8,6 +8,7 @@ export default function ResultsList({ results, loading }) {
   if (!results || results.length === 0) {
     return <p className="text-gray-500 mt-4">No results found.</p>;
   }
+  
 
   function highlight(text, query) {
   if (!query) return text;
@@ -22,7 +23,9 @@ export default function ResultsList({ results, loading }) {
   {highlight(item.snippet, item.query)}
 </p>
 
-
+  if (loading) return <p className="text-gray-500 mt-4">Loading results...</p>;
+  if (!results || results.length === 0) return <p className="text-gray-500 mt-4">No results found.</p>;
+  
   return (
     <ul className="mt-4 space-y-2">
       {results.map((item, idx) => (
