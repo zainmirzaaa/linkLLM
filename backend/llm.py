@@ -16,3 +16,13 @@ async def query_openai(prompt: str) -> str:
         return resp.choices[0].message["content"]
     except Exception as e:
         return f"[LLM error: {e}]"
+    
+
+async def rephrase_query(q: str) -> str:
+    prompt = (
+        "Rephrase the following Stack Overflow search query to be concise and specific:\n"
+        f"Query: {q}\nRephrased:"
+    )
+    answer = await query_openai(prompt)
+    return answer.strip()
+
