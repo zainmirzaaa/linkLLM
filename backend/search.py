@@ -30,3 +30,6 @@ def search(query: str) -> List[Dict]:
     res = idx.query(query)
     # normalize
     return [{"title": str(r), "link": "https://stackoverflow.com", "snippet": str(r)} for r in res]
+
+def rank(results: List[Dict]) -> List[Dict]:
+    return sorted(results, key=lambda r: len(r.get("snippet", "")), reverse=True)[:10]
