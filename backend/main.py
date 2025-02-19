@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
+from .search import search as vector_search, rank as rank_results
+from .llm import rephrase_query
 
 app = FastAPI()
 
@@ -45,3 +47,14 @@ async def search_api(payload: SearchRequest):
             snippet=f"Matched query: {q}"
         )
     ]
+
+
+@app.post("/search/v1", response_model=List[SearchResult])
+async def search_api_v1(payload: SearchRequest):
+    q = payload.q.strip()
+    if not q:
+        return []
+    better_q = await rephrase_query(q)
+    raw = vector_search(better_q or q)
+    ranked = rank_results(raw)
+    return [SearchResult(**r) for r in ranked]
