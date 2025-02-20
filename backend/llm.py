@@ -26,3 +26,12 @@ async def rephrase_query(q: str) -> str:
     answer = await query_openai(prompt)
     return answer.strip()
 
+
+def _truncate(text: str, max_tokens: int = 800) -> str:
+    # naive truncation; good enough for a small commit
+    return text[: max_tokens * 4]  # ~4 chars per token rough
+
+async def safe_query(prompt: str) -> str:
+    return await query_openai(_truncate(prompt))
+
+
