@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from typing import List
 from .search import search as vector_search, rank as rank_results
 from .llm import rephrase_query
+from .llm import safe_query
 
 app = FastAPI()
 
@@ -58,3 +59,16 @@ async def search_api_v1(payload: SearchRequest):
     raw = vector_search(better_q or q)
     ranked = rank_results(raw)
     return [SearchResult(**r) for r in ranked]
+
+
+class AskRequest(BaseModel):
+  question: str
+
+class AskResponse(BaseModel):
+  answer: str
+
+@app.post("/ask/v1", response_model=AskResponse)
+async def ask_v1(req: AskRequest):
+    answer = await safe_query(req.question)
+    return AskResponse(answer=answer)
+
