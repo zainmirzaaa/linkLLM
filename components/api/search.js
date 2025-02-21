@@ -13,3 +13,14 @@ export default function handler(req, res) {
     res.status(500).json({ error: "Server error" });
   }
 }
+
+res.status(200).json({
+  results: [
+    { 
+      title: "Sample Result", 
+      link: "https://stackoverflow.com", 
+      snippet: `Query: ${q}` 
+    }
+  ],
+  timestamp: Date.now()
+});
