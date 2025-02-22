@@ -1,6 +1,7 @@
 import React from "react";
 
 export default function ResultsList({ results, loading }) {
+    if (loading) return <p>Loading results...</p>;
   if (loading) {
     return <p className="text-gray-500 mt-4">Loading results...</p>;
   }

@@ -5,6 +5,15 @@ from typing import List
 from .search import search as vector_search, rank as rank_results
 from .llm import rephrase_query
 from .llm import safe_query
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
+@app.post("/ask")
+async def ask(query: Query):
+    logging.info(f"Received query: {query.question}")
+    return {"message": f"You asked: {query.question}"}
+
 
 app = FastAPI()
 
