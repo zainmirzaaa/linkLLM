@@ -34,6 +34,10 @@ export default function SearchBar({ onSearch, placeholder }) {
           Search
         </button>
       </div>
+      <div className="flex gap-2 items-center">
+        {/* input + buttons */}
+        {loading && <span className="text-sm text-gray-500">Loading...</span>}
+      </div>
       {error && <p className="text-red-500 text-sm">{error}</p>}
     </form>
   );
