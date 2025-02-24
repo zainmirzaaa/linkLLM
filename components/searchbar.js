@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 
 export default function SearchBar({ onSearch, placeholder }) {
   const [query, setQuery] = useState("");
@@ -15,6 +16,22 @@ export default function SearchBar({ onSearch, placeholder }) {
     onSearch(cleanQuery);
     setQuery(""); // reset input after submit
   };
+
+  // add near other hooks
+
+// inside component, above return
+useEffect(() => {
+  const onKey = (e) => {
+    if (e.key === 'Escape') setQuery('');
+    if (e.key === 'Enter' && document.activeElement === document.body) {
+      const clean = query.trim();
+      if (clean) onSearch(clean);
+    }
+  };
+  window.addEventListener('keydown', onKey);
+  return () => window.removeEventListener('keydown', onKey);
+}, [query, onSearch]);
+
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-2">
