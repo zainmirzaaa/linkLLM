@@ -19,6 +19,8 @@ export default function ResultsList({ results, loading }) {
   );
 }
 
+
+
 // inside <li> replace snippet line:
 <p className="text-sm text-gray-600">
   {highlight(item.snippet, item.query)}
@@ -41,7 +43,15 @@ export default function ResultsList({ results, loading }) {
           </a>
           <p className="text-sm text-gray-600">{item.snippet}</p>
         </li>
+        
       ))}
+      <button
+  onClick={() => navigator.clipboard.writeText(item.link)}
+  className="ml-2 text-xs text-blue-500 underline"
+>
+  Copy Link
+</button>
+
     </ul>
   );
 }

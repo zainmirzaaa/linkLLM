@@ -27,6 +27,8 @@ export default function SearchBar({ onSearch, placeholder, loading = false }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [query, minScore, limit, onSearch]);
 
+  
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-2">
       <div className="flex gap-2 items-center">
