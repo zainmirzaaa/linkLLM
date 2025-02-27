@@ -45,6 +45,15 @@ export default function ResultsList({ results, loading }) {
         </li>
         
       ))}
+      <li key={idx} className="p-3 border rounded hover:bg-gray-50">
+  <span className="mr-2 text-gray-500">#{idx + 1}</span>
+  <a href={item.link} target="_blank" rel="noopener noreferrer"
+     className="text-blue-600 font-medium">
+    {item.title}
+  </a>
+  <p className="text-sm text-gray-600">{item.snippet}</p>
+</li>
+
       <button
   onClick={() => navigator.clipboard.writeText(item.link)}
   className="ml-2 text-xs text-blue-500 underline"
