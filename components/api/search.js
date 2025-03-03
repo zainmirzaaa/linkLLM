@@ -24,3 +24,13 @@ res.status(200).json({
   ],
   timestamp: Date.now()
 });
+
+let requestCount = 0;
+
+export default async function handler(req, res) {
+  requestCount++;
+  console.log(`Request #${requestCount} received`);
+
+  // existing code...
+}
+
