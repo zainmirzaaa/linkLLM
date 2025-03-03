@@ -17,7 +17,24 @@ export default function ResultsList({ results, loading }) {
   return text.split(regex).map((part, i) =>
     regex.test(part) ? <mark key={i}>{part}</mark> : part
   );
+
+function estimateTime(text) {
+  const words = text.split(/\s+/).length;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+  return `${minutes} min read`;
 }
+
+// inside list item
+<p className="text-xs text-gray-400">
+  {estimateTime(item.snippet)}
+</p>
+}
+
+
+
+
+
+
 
 
 
