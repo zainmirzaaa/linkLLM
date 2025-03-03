@@ -6,6 +6,16 @@ from .search import search as vector_search, rank as rank_results
 from .llm import rephrase_query
 from .llm import safe_query
 import logging
+import time
+from fastapi import Request
+
+@app.middleware("http")
+async def log_request_time(request: Request, call_next):
+    start = time.time()
+    response = await call_next(request)
+    duration = round((time.time() - start) * 1000, 2)
+    print(f"{request.method} {request.url.path} took {duration}ms")
+    return response
 
 logging.basicConfig(level=logging.INFO)
 
