@@ -8,6 +8,7 @@ from .llm import safe_query
 import logging
 import time
 from fastapi import Request
+from .config import settings
 
 @app.middleware("http")
 async def log_request_time(request: Request, call_next):
@@ -90,4 +91,8 @@ class AskResponse(BaseModel):
 async def ask_v1(req: AskRequest):
     answer = await safe_query(req.question)
     return AskResponse(answer=answer)
+
+@app.get("/config-check")
+async def config_check():
+    return {"debug": settings.debug, "openai_key_set": bool(settings.openai_key)}
 
