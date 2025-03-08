@@ -33,3 +33,27 @@ def search(query: str) -> List[Dict]:
 
 def rank(results: List[Dict]) -> List[Dict]:
     return sorted(results, key=lambda r: len(r.get("snippet", "")), reverse=True)[:10]
+
+_cache = {}
+
+def search(query: str):
+    if query in _cache:
+        return _cache[query]
+
+    # placeholder response
+    results = [{"title": "Cached Example", "link": "https://so.com", "snippet": query}]
+    _cache[query] = results
+    return results
+
+from fastapi import Request, HTTPException
+
+requests_per_ip = {}
+
+@app.middleware("http")
+async def rate_limit(request: Request, call_next):
+    ip = request.client.host
+    count = requests_per_ip.get(ip, 0) + 1
+    requests_per_ip[ip] = count
+    if count > 50:  # limit for demo
+        raise HTTPException(status_code=429, detail="Too many requests")
+    return await call_next(request)

@@ -96,3 +96,15 @@ async def ask_v1(req: AskRequest):
 async def config_check():
     return {"debug": settings.debug, "openai_key_set": bool(settings.openai_key)}
 
+from fastapi import Request, HTTPException
+
+requests_per_ip = {}
+
+@app.middleware("http")
+async def rate_limit(request: Request, call_next):
+    ip = request.client.host
+    count = requests_per_ip.get(ip, 0) + 1
+    requests_per_ip[ip] = count
+    if count > 50:  # limit for demo
+        raise HTTPException(status_code=429, detail="Too many requests")
+    return await call_next(request)
