@@ -108,3 +108,19 @@ async def rate_limit(request: Request, call_next):
     if count > 50:  # limit for demo
         raise HTTPException(status_code=429, detail="Too many requests")
     return await call_next(request)
+
+analytics = {"queries": 0, "asks": 0}
+
+@app.post("/ask")
+async def ask(query: Query):
+    analytics["asks"] += 1
+    return {"message": f"You asked: {query.question}"}
+
+@app.post("/search")
+async def search_api(payload: SearchRequest):
+    analytics["queries"] += 1
+    return [{"title": "Result", "link": "https://so.com", "snippet": payload.q}]
+
+@app.get("/analytics")
+async def get_analytics():
+    return analytics
