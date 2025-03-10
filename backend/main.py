@@ -135,3 +135,17 @@ async def search_api(payload: SearchRequest):
 @app.get("/analytics")
 async def get_analytics():
     return analytics
+
+from typing import List
+from pydantic import BaseModel
+
+class SearchItem(BaseModel):
+    title: str
+    link: str
+    snippet: str
+    score: int = 0
+
+@app.post("/search/typed", response_model=List[SearchItem])
+async def search_typed(payload: SearchRequest):
+    rows = [{"title":"Result","link":"https://so.com","snippet":payload.q,"score":75}]
+    return [SearchItem(**r) for r in rows]
