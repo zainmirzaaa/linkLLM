@@ -9,6 +9,17 @@ import logging
 import time
 from fastapi import Request
 from .config import settings
+from fastapi import Request
+from fastapi.responses import JSONResponse
+
+@app.exception_handler(Exception)
+async def on_exception(request: Request, exc: Exception):
+    print(f"[ERR] {request.method} {request.url.path} -> {exc}")
+    return JSONResponse(
+        status_code=500,
+        content={"error": "internal_error", "message": str(exc)[:200]},
+    )
+
 
 @app.middleware("http")
 async def log_request_time(request: Request, call_next):
