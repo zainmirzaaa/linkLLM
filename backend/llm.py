@@ -1,5 +1,23 @@
 import os
 import openai
+import time
+
+async def _with_retry(call, attempts=2, delay=0.5):
+    for i in range(attempts):
+        try:
+            return call(timeout=12)  # 12s safeguard
+        except Exception as e:
+            if i == attempts - 1:
+                raise
+            time.sleep(delay)
+
+async def query_openai(prompt: str) -> str:
+    if not OPENAI_API_KEY: return "[LLM disabled]"
+    resp = await _with_retry(lambda **kw: openai.ChatCompletion.create(
+        model="gpt-4o-mini", messages=[{"role":"user","content":prompt}], **kw
+    ))
+    return resp.choices[0].message["content"]
+
 
 OPENAI_API_KEY = os.getenv()
 openai.api_key = OPENAI_API_KEY
