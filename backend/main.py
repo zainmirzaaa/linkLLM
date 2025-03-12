@@ -11,6 +11,18 @@ from fastapi import Request
 from .config import settings
 from fastapi import Request
 from fastapi.responses import JSONResponse
+import datetime
+
+def log_line(msg: str):
+    with open("server.log", "a", encoding="utf-8") as f:
+        ts = datetime.datetime.now().isoformat(timespec="seconds")
+        f.write(f"[{ts}] {msg}\n")
+
+@app.get("/ping")
+async def ping():
+    log_line("ping called")
+    return {"ok": True}
+
 
 @app.exception_handler(Exception)
 async def on_exception(request: Request, exc: Exception):
@@ -149,3 +161,15 @@ class SearchItem(BaseModel):
 async def search_typed(payload: SearchRequest):
     rows = [{"title":"Result","link":"https://so.com","snippet":payload.q,"score":75}]
     return [SearchItem(**r) for r in rows]
+
+import datetime
+
+def log_line(msg: str):
+    with open("server.log", "a", encoding="utf-8") as f:
+        ts = datetime.datetime.now().isoformat(timespec="seconds")
+        f.write(f"[{ts}] {msg}\n")
+
+@app.get("/ping")
+async def ping():
+    log_line("ping called")
+    return {"ok": True}
