@@ -12,6 +12,19 @@ from .config import settings
 from fastapi import Request
 from fastapi.responses import JSONResponse
 import datetime
+from fastapi import BackgroundTasks
+from .search import _ensure_index
+
+def warm_index():
+    idx = _ensure_index()
+    print("index warm:", bool(idx))
+
+@app.on_event("startup")
+async def app_start():
+    # kick off warming without blocking startup
+    import threading
+    threading.Thread(target=warm_index, daemon=True).start()
+
 
 def log_line(msg: str):
     with open("server.log", "a", encoding="utf-8") as f:
