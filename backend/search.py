@@ -1,4 +1,17 @@
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
+import time
+_cache = {}  # key -> (expiry_ts, value)
+_TTL_SEC = 120
+
+def search(query: str):
+    now = time.time()
+    hit = _cache.get(query)
+    if hit and hit[0] > now:
+        return hit[1]
+    results = [{"title":"TTL Example","link":"https://so.com","snippet":query}]
+    _cache[query] = (now + _TTL_SEC, results)
+    return results
+
 
 # placeholder: later load from SO dataset
 documents = SimpleDirectoryReader("data").load_data()
@@ -45,15 +58,3 @@ def search(query: str):
     _cache[query] = results
     return results
 
-from fastapi import Request, HTTPException
-
-requests_per_ip = {}
-
-@app.middleware("http")
-async def rate_limit(request: Request, call_next):
-    ip = request.client.host
-    count = requests_per_ip.get(ip, 0) + 1
-    requests_per_ip[ip] = count
-    if count > 50:  # limit for demo
-        raise HTTPException(status_code=429, detail="Too many requests")
-    return await call_next(request)
