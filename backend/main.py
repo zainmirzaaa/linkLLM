@@ -186,3 +186,19 @@ def log_line(msg: str):
 async def ping():
     log_line("ping called")
     return {"ok": True}
+
+
+
+class SearchPageRequest(BaseModel):
+    q: str
+    offset: int = 0
+    limit: int = 10
+
+@app.post("/search/page", response_model=List[SearchItem])
+async def search_page(req: SearchPageRequest):
+    data = [
+        {"title": f"Hit {i}", "link": "https://so.com", "snippet": req.q, "score": 50+i}
+        for i in range(100)
+    ]
+    sl = data[req.offset : req.offset + req.limit]
+    return [SearchItem(**r) for r in sl]
