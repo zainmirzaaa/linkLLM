@@ -202,3 +202,11 @@ async def search_page(req: SearchPageRequest):
     ]
     sl = data[req.offset : req.offset + req.limit]
     return [SearchItem(**r) for r in sl]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins.split(","),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
