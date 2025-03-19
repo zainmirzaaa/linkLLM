@@ -14,6 +14,17 @@ from fastapi.responses import JSONResponse
 import datetime
 from fastapi import BackgroundTasks
 from .search import _ensure_index
+from fastapi.exceptions import RequestValidationError
+from starlette.responses import JSONResponse
+from starlette.status import HTTP_404_NOT_FOUND
+
+@app.exception_handler(404)
+async def not_found_handler(request, exc):
+    return JSONResponse(
+        status_code=HTTP_404_NOT_FOUND,
+        content={"error": "not_found", "path": request.url.path},
+    )
+
 
 def warm_index():
     idx = _ensure_index()
