@@ -17,6 +17,18 @@ from .search import _ensure_index
 from fastapi.exceptions import RequestValidationError
 from starlette.responses import JSONResponse
 from starlette.status import HTTP_404_NOT_FOUND
+import uuid
+from fastapi import Request
+
+@app.middleware("http")
+async def request_id_mw(request: Request, call_next):
+    rid = request.headers.get("x-request-id") or str(uuid.uuid4())
+    request.state.request_id = rid
+    response = await call_next(request)
+    response.headers["x-request-id"] = rid
+    print(f"[RID {rid}] {request.method} {request.url.path}")
+    return response
+
 
 @app.exception_handler(404)
 async def not_found_handler(request, exc):
