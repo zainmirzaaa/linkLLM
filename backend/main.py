@@ -19,6 +19,13 @@ from starlette.responses import JSONResponse
 from starlette.status import HTTP_404_NOT_FOUND
 import uuid
 from fastapi import Request
+from .logjson import log_json
+
+@app.get("/ping")
+async def ping():
+    log_json("ping", ok=True)
+    return {"ok": True}
+
 
 @app.middleware("http")
 async def request_id_mw(request: Request, call_next):
