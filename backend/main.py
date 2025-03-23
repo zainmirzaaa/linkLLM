@@ -20,6 +20,12 @@ from starlette.status import HTTP_404_NOT_FOUND
 import uuid
 from fastapi import Request
 from .logjson import log_json
+from .auth import require_api_key
+
+@app.get("/secure", dependencies=[Depends(require_api_key)])
+async def secure_echo():
+    return {"ok": True}
+
 
 @app.get("/ping")
 async def ping():
