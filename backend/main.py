@@ -21,6 +21,18 @@ import uuid
 from fastapi import Request
 from .logjson import log_json
 from .auth import require_api_key
+from fastapi import FastAPI
+app = FastAPI(title="LinkLLM API", version="0.1.0", openapi_tags=[
+    {"name": "health", "description": "Service health & readiness"},
+    {"name": "search", "description": "Query, rank and fetch results"},
+    {"name": "llm", "description": "LLM-backed endpoints"},
+])
+
+@app.get("/health", tags=["health"], summary="Basic health check")
+async def health():
+    """Returns liveness of the service."""
+    return {"ok": True}
+
 
 @app.get("/secure", dependencies=[Depends(require_api_key)])
 async def secure_echo():
