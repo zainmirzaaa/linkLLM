@@ -27,6 +27,16 @@ app = FastAPI(title="LinkLLM API", version="0.1.0", openapi_tags=[
     {"name": "search", "description": "Query, rank and fetch results"},
     {"name": "llm", "description": "LLM-backed endpoints"},
 ])
+from pydantic import BaseModel, Field, constr
+
+SafeQuery = constr(strip_whitespace=True, min_length=2, max_length=200,
+                   regex=r"^[\w\s\-\+\.\?\#:/\(\)\[\]]+$")
+
+class SearchRequest(BaseModel):
+    q: SafeQuery = Field(..., description="Search string 2-200 chars")
+    minScore: int = Field(0, ge=0, le=100)
+    limit: int = Field(10, ge=1, le=50)
+
 
 @app.get("/health", tags=["health"], summary="Basic health check")
 async def health():
