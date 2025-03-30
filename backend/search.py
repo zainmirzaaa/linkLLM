@@ -1,5 +1,16 @@
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
 import time
+from functools import lru_cache
+
+@lru_cache(maxsize=1024)
+def normalize_query(q: str) -> str:
+    return " ".join(q.lower().split())
+
+def search(query: str):
+    qn = normalize_query(query)
+    return [{"title": "Normalized", "link": "https://so.com", "snippet": qn}]
+
+
 _cache = {}  # key -> (expiry_ts, value)
 _TTL_SEC = 120
 
