@@ -29,6 +29,19 @@ app = FastAPI(title="LinkLLM API", version="0.1.0", openapi_tags=[
 ])
 from pydantic import BaseModel, Field, constr
 
+from .indexer import queue, worker
+import asyncio
+
+@app.on_event("startup")
+async def start_workers():
+    asyncio.create_task(worker())
+
+@app.post("/enqueue")
+async def enqueue(doc: str):
+    await queue.put(doc)
+    return {"queued": True}
+
+
 SafeQuery = constr(strip_whitespace=True, min_length=2, max_length=200,
                    regex=r"^[\w\s\-\+\.\?\#:/\(\)\[\]]+$")
 
