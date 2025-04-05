@@ -281,3 +281,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+START_TS = time.time()
+
+@app.get("/healthz", tags=["health"])
+async def healthz():
+    uptime = round(time.time() - START_TS, 1)
+    return {"ok": True, "uptime_sec": uptime, "version": "0.1.0"}
